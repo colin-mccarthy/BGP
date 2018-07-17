@@ -1,0 +1,6 @@
+---
+- name: Configure Cisco router
+  hosts: ios
+  gather_facts: no
+  roles:
+    - cisco_base

@@ -1,0 +1,16 @@
+---
+# vars file for roles/cisco_base
+enable_pass: cisco
+time_zone: "MST -7"
+dns1: 10.1.0.102
+dns2: 10.1.0.101
+dns3: 10.1.0.100
+ospf_router_id: 192.168.161.9
+logging_server1: 10.1.0.1
+logging_server2: 10.1.0.2
+tacacs_server_1: 10.1.0.4
+tacacs_server_2: 10.1.0.5
+ntp_1: 10.1.0.6
+ntp_2: 10.1.0.7
+ntp_3: 10.1.0.8
+

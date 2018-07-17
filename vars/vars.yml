@@ -1,0 +1,10 @@
+---
+    description: foo
+    bgp_neighbor_ip: 1.1.1.1
+    bgp_password: foo
+    prefix_list: []
+    ansible_network_os: ios
+    vlan: 3971
+    prefix: 10.52.8.0/21
+    prefix_list_name: 651896783553
+

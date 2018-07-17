@@ -1,0 +1,11 @@
+---
+# tasks file for roles/cisco_base
+- name: Copy base config to Cisco router / switch
+  ios_config:
+    src: base_config.j2
+
+- name: Configure banner 1
+  ios_banner:
+    banner: login
+    text: "{{ lookup('file', 'banner.txt') }}"
+    state: present

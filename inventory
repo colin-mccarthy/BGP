@@ -1,0 +1,16 @@
+[ios]
+192.168.161.15  ansible_ssh_host=192.168.161.15  
+#192.168.161.14  ansible_ssh_host=192.168.161.14
+#192.168.161.09  ansible_ssh_host=192.168.161.09
+#192.168.161.88  ansible_ssh_host=192.168.161.88
+
+[ios:vars]
+
+ansible_ssh_pass=cisco
+ansible_become_pass=cisco
+ansible_user=pi
+ansible_network_os=ios
+ansible_connection=network_cli
+ansible_become=yes
+ansible_become_method=enable
+

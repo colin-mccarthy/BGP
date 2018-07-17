@@ -1,0 +1,80 @@
+service nagle
+no service pad
+service timestamps debug datetime localtime
+service timestamps log datetime localtime
+service password-encryption
+logging buffered 15000
+logging console critical
+logging monitor warnings
+enable secret 0 {{ enable_pass }}
+username colin privilege 15 secret 0 cisco
+clock timezone {{ time_zone }}
+clock summer-time MDT recurring
+system mtu routing 1500
+vtp mode transparent
+ip routing
+ip domain-name thenetwork.engineer
+ip name-server {{ dns1 }}
+ip name-server {{ dns2 }}
+ip name-server {{ dns3 }}
+login on-failure log every 5
+login on-success log
+archive
+ log config
+  logging enable
+  logging size 300
+  notify syslog contenttype plaintext
+  hidekeys
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+vlan internal allocation policy ascending
+ip ssh time-out 60
+ip ssh version 2
+!
+router ospf 1
+ router-id {{ ospf_router_id }}
+ log-adjacency-changes
+ auto-cost reference-bandwidth 10000
+ area 0 authentication message-digest
+ passive-interface default
+ no passive-interface GigabitEthernet0/1
+ no passive-interface GigabitEthernet0/2
+!
+ip classless
+no ip http server
+no ip http secure-server
+ip sla enable reaction-alerts
+logging source-interface Loopback0
+logging {{ logging_server1 }}
+logging {{ logging_server2 }}
+snmp-server community ansibull RO 99
+snmp-server trap-source Loopback0
+snmp-server contact noc@yourcompany.com
+snmp-server enable traps ospf state-change
+snmp-server enable traps ospf errors
+snmp-server enable traps ospf retransmit
+snmp-server enable traps ospf lsa
+snmp-server enable traps ospf cisco-specific state-change nssa-trans-change
+snmp-server enable traps ospf cisco-specific state-change shamlink interface
+snmp-server enable traps ospf cisco-specific state-change shamlink neighbor
+snmp-server enable traps ospf cisco-specific errors
+snmp-server enable traps ospf cisco-specific retransmit
+snmp-server enable traps ospf cisco-specific lsa
+snmp-server host 10.1.0.3 ansibull
+line con 0
+line vty 0 4
+ exec-timeout 30 0
+ privilege level 15
+ transport preferred ssh
+ transport input ssh
+ transport output ssh
+line vty 5 15
+ exec-timeout 30 0
+ privilege level 15
+ transport preferred ssh
+ transport input ssh
+ transport output ssh
+ntp source Loopback0
+ntp server {{ ntp_1 }}
+ntp server {{ ntp_2 }}
+ntp server {{ ntp_3 }} prefer

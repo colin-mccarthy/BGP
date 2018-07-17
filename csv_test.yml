@@ -1,0 +1,12 @@
+---
+- name: Read variables from CSV file
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - include_role: 
+        name: config_bgp
+      vars:
+        bgp_neighbor_ip: "{{ item }}"
+      with_items: 
+        - 1.1.1.1
+        - 1.1.1.4
