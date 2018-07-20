@@ -1,0 +1,65 @@
+---
+- name: Configure the F5s
+  hosts: f5
+  gather_facts: false
+  environment:
+    F5_SERVER: "{{ inventory_hostname }}"
+    F5_VALIDATE_CERTS: "False"
+    F5_SERVER_PORT: 8443
+    F5_USER: admin
+    F5_PASSWORD: admin
+  tasks:
+    - name: Include vars
+      include_vars: f5-vserver-vars.yml
+      delegate_to: localhost
+      
+    - name: Collect BIG-IP facts
+      bigip_facts:
+        server: 52.201.158.61
+        server_port: 8443
+        user: admin
+        password: admin
+        include: 
+          - interface
+          - vlan
+      delegate_to: localhost
+      
+    - name: Create the http-pool pool
+      delegate_to: localhost
+      bigip_pool:
+        name: "{{ pool_name }}"
+
+    - name: Add a new node
+      delegate_to: localhost
+      bigip_node:
+        state: "present"
+        partition: "{{ partition_name }}"
+        host: "{{ item }}"
+        name: "{{ item }}"
+      when: app_hosts is defined
+      with_items: "{{ app_hosts }}"
+
+    - name: Add host to pool member
+      delegate_to: localhost
+      bigip_pool_member:
+        pool: "{{ pool_name }}"
+        partition: "{{ partition_name }}"
+        host: "{{ item }}"
+        port: "{{ vs_port }}"
+        description: "{{ pool_desc }}"
+        ratio: 2
+      when: app_hosts is defined
+      with_items: "{{ app_hosts }}"
+
+    - name: Add VS on BIG-IP
+      delegate_to: localhost
+      bigip_virtual_server:
+        name: "{{ vs_name }}"
+        destination: "{{ vs_ip }}"
+        port: "{{ vs_port }}"
+        pool: "{{ pool_name }}"
+        snat: Automap
+
+    - debug: msg="The Virtual Server Address is {{ vs_ip }}"
+      delegate_to: localhost
+

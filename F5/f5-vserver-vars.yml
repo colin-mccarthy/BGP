@@ -1,0 +1,12 @@
+---
+pool_name: ali.com
+partition_name: Common
+vs_port: 1344
+pool_desc: "ali Test Pool"
+vs_name: "ali_test_vserver"
+vs_ip: '40.36.242.170'
+
+app_hosts: 
+  - 50.36.29.41
+  - 50.36.29.40
+
